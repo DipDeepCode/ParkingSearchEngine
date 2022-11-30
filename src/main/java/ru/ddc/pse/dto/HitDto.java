@@ -1,4 +1,4 @@
-package ru.ddc.pse.models;
+package ru.ddc.pse.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class Hit {
+public class HitDto {
     @JsonProperty("_id")
     private String id;
     @JsonProperty("_score")

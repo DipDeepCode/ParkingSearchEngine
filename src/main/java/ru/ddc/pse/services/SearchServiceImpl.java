@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.ddc.pse.customObjectMapper.CustomObjectMapperImpl;
 import ru.ddc.pse.exceptions.PseException;
-import ru.ddc.pse.models.Hit;
+import ru.ddc.pse.dto.HitDto;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,9 +50,9 @@ public class SearchServiceImpl implements SearchService {
             throw new PseException(e.getMessage());
         }
 
-        List<Hit> hitList = mapResponseToHitModel(searchResponse);
+        List<HitDto> hitDtoList = mapResponseToHitDto(searchResponse);
 
-        return parseHitListToStringList(hitList);
+        return parseHitDtoListToStringList(hitDtoList);
     }
 
     private SearchRequest getSearchRequest(String queryString) {
@@ -64,17 +64,17 @@ public class SearchServiceImpl implements SearchService {
                 .query(query);
     }
 
-    private List<Hit> mapResponseToHitModel(SearchResponse searchResponse) {
+    private List<HitDto> mapResponseToHitDto(SearchResponse searchResponse) {
         SearchResponseHits hits = searchResponse.getHits();
         assert hits != null;
         List<Object> objectList= hits.getHits();
         assert objectList != null;
-        return objectMapper.mapObjectListToModelList(objectList, Hit.class);
+        return objectMapper.mapObjectListToModelList(objectList, HitDto.class);
     }
 
-    private List<String> parseHitListToStringList(List<Hit> hitList) {
-        return hitList.stream()
-                .map(hit -> hit.getSource().get(manticoreColumnName))
+    private List<String> parseHitDtoListToStringList(List<HitDto> hitDtoList) {
+        return hitDtoList.stream()
+                .map(hitDto -> hitDto.getSource().get(manticoreColumnName))
                 .collect(Collectors.toList());
     }
 }
